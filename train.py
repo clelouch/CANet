@@ -1,17 +1,16 @@
 import pandas as pd
 import argparse
-import torch
 import torch.nn.init
 import torch.optim as optim
 import torch.backends.cudnn as cudnn
 import os
-from model import HardNet, HardNetSTN
-from loss import *
-from dataset import create_loaders
+from old_version.model import HardNet, HardNetSTN
+from old_version.loss import *
+from old_version.dataset import create_loaders
 import random
 import numpy as np
 from tqdm import tqdm
-from utils import *
+from old_version.utils import *
 
 # Training settings
 parser = argparse.ArgumentParser(description='PyTorch HardNet')
@@ -46,7 +45,7 @@ parser.add_argument('--experiment-name', default='liberty_train/', help='experim
 # Model options
 parser.add_argument('--loss', default='triplet_margin', help='Other options: softmax, contrastive')
 parser.add_argument('--batch-reduce', default='multi', type=str, help='Other options: adapt, multi, min, L2Net')
-parser.add_argument('--ratio', default=0.2, type=float)
+parser.add_argument('--ratio', default=2.4, type=float)
 parser.add_argument('--neighbor', default=8, type=int)
 parser.add_argument('--mag', default=8, type=int)
 parser.add_argument('--clamp', default=8, type=int)
@@ -64,8 +63,7 @@ parser.add_argument('--anchorswap', type=str2bool, default=True, help='turns on 
 # Device options
 parser.add_argument('--cuda', action='store_true', default=True, help='enables CUDA training')
 parser.add_argument('--gpu-id', default='0', type=str, help='id(s) for CUDA_VISIBLE_DEVICES')
-parser.add_argument('--seed', type=int, default=0, metavar='S',
-                    help='random seed (default: 0)')
+parser.add_argument('--seed', type=int, default=0, help='random seed (default: 0)')
 parser.add_argument('--log-interval', type=int, default=10, metavar='LI',
                     help='how many batches to wait before logging training status')
 
