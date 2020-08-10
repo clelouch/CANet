@@ -27,6 +27,7 @@ def set_arg_name(args):
     args.name += '_epochs' + str(args.epochs)
 
 
+
 def adjust_learning_rate(args, optimizer):
     """Updates the learning rate given the learning rate decay.
     The routine has been implemented according to the original Lua SGD optimizer
