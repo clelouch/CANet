@@ -135,19 +135,22 @@ def create_loaders(args, load_random_triplets=False):
     cv2_scale = lambda x: cv2.resize(x, dsize=(32, 32), interpolation=cv2.INTER_LINEAR)
     np_reshape = lambda x: np.reshape(x, (32, 32, 1))
     np_reshape64 = lambda x: np.reshape(x, (64, 64, 1))
+    cv2_resize = lambda x: cv2.resize(np.array(x),dsize=(32, 32), interpolation=cv2.INTER_LINEAR)
 
     transform_test = transforms.Compose([
-        transforms.Lambda(np_reshape64),
-        transforms.ToPILImage(),
-        transforms.Resize(32),
-        transforms.ToTensor()])
+        transforms.Lambda(cv2_scale),
+        transforms.Lambda(np_reshape),
+        transforms.ToTensor(),
+        transforms.Normalize((mean_image,), (std_image,))])
     transform_train = transforms.Compose([
         transforms.Lambda(np_reshape64),
         transforms.ToPILImage(),
         RandomRotate(rotate_degree),
         transforms.RandomResizedCrop(32, scale=(0.9, 1.0), ratio=(0.9, 1.1)),
-        transforms.Resize(32),
-        transforms.ToTensor()])
+        transforms.Lambda(cv2_resize),
+        transforms.Lambda(np_reshape),
+        transforms.ToTensor(),
+        transforms.Normalize((mean_image,), (std_image,))])
     transform = transforms.Compose([
         transforms.Lambda(cv2_scale),
         transforms.Lambda(np_reshape),
